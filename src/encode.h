@@ -9,7 +9,16 @@
 void utf8_check(const char *str, int *good, int *bad, int *strange, int flags);
 void utf8_check_mem(const void *str, size_t size, int *good, int *bad, int *strange, int flags);
 
-void big5_check(const char *str, int *good, int *bad, int *strange, int flags);
-void big5_check_mem(const void *str, size_t size, int *good, int *bad, int *strange, int flags);
+void euc_cn_check(const char *str, int *good, int *bad, int *strange, int flags);
+void euc_cn_check_mem(const void *str, size_t size, int *good, int *bad, int *strange, int flags);
+
+void euc_jp_check(const char *str, int *good, int *bad, int *strange, int flags);
+void euc_jp_check_mem(const void *str, size_t size, int *good, int *bad, int *strange, int flags);
+
+void euc_kr_check(const char *str, int *good, int *bad, int *strange, int flags);
+void euc_kr_check_mem(const void *str, size_t size, int *good, int *bad, int *strange, int flags);
+
+void euc_tw_check(const char *str, int *good, int *bad, int *strange, int flags);
+void euc_tw_check_mem(const void *str, size_t size, int *good, int *bad, int *strange, int flags);
 
 #endif //__ENCODE_H

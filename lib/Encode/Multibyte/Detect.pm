@@ -3,12 +3,13 @@ package Encode::Multibyte::Detect;
 use strict;
 use warnings;
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 use base 'Exporter';
 
 our @EXPORT = ();
-our @EXPORT_OK = qw(detect is_valid_utf8 is_strict_utf8 is_valid_big5);
+our @EXPORT_OK = qw(detect is_7bit is_valid_utf8 is_strict_utf8
+    is_valid_euc_cn is_valid_euc_jp is_valid_euc_kr is_valid_euc_tw);
 
 our %EXPORT_TAGS = ( all => [@EXPORT_OK] );
 
@@ -18,8 +19,16 @@ XSLoader::load('Encode::Multibyte::Detect');
 sub detect {
     my ($str, %opts) = @_;
 
+    my %avail = map {$_ => 1} @{$opts{avail} || []};
+
+    return '' if is_7bit($str);
+
     return 'utf-8' if is_strict_utf8($str);
-    return 'big-5' if is_valid_big5($str);
+
+    return 'euc-cn' if $avail{'euc-cn'} && is_valid_euc_cn($str);
+    return 'euc-jp' if $avail{'euc-jp'} && is_valid_euc_jp($str);
+    return 'euc-kr' if $avail{'euc-kr'} && is_valid_euc_kr($str);
+    return 'euc-tw' if $avail{'euc-tw'} && is_valid_euc_tw($str);
 
     return '' if $opts{strict};
 
@@ -39,14 +48,20 @@ Encode::Multibyte::Detect - detect multibyte encoding
     use Encode::Multibyte::Detect qw(:all);
     use Encode;
 
-    $enc = detect($octets);
+    $enc = detect($octets, strict => 1, avail => [qw(euc-cn)]);
     if ($enc) {
         $string = decode($enc, $octets);
     }
 
+    is_7bit($octets);
+
     is_valid_utf8($octets);
     is_strict_utf8($octets);
-    is_valid_big5($octets);
+
+    is_valid_euc_cn($octets);
+    is_valid_euc_jp($octets);
+    is_valid_euc_kr($octets);
+    is_valid_euc_tw($octets);
 
 =head1 REPOSITORY
 
